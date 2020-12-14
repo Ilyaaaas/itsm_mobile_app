@@ -7,41 +7,91 @@ import {useState} from "react";
 // import { Camera, Permissions } from 'expo';
 // import Camera from 'react-native-camera';
 import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
 
 export default function TabTwoScreen() {
     const [sendingState, setSendingState] = useState('didntsend');
     const [selectedValue, setSelectedValue] = useState("java");
     const [reqCateg, setReqCateg] = useState("");
     const [reqDescr, setReqDescr] = useState("");
+    const [file, setFile] = useState();
 
-    console.log('sendingState '+sendingState);
-    console.log('reqCateg '+reqCateg);
+    async function sendFile(){
+        // console.log('response');
+        // console.log(file);
+        let formData = new FormData();
+        formData.append('file', { uri: 'file:///Users/ilyaaaas/Library/Developer/CoreSimulator/Devices/98C3E053-1B98-4E23-9D3A-7018D99A2295/data/Containers/Data/Application/D7239EE2-4A75-4796-BA3F-68CE457C9BFA/Library/Caches/ExponentExperienceData/%2540anonymous%252Ffooter_tabs-a89cd3b3-e1de-40cf-8b23-f43483a8d726/DocumentPicker/F3C63C44-BA87-40E3-80D0-3E67E29A3D5C.JPG', name: 'IMG_0007.JPG', size: 94611, type: 'JPG' });
+        // console.log(formData);
+        const response = await fetch(
+            'https://onerstudiyasy.kz/itsm_create_req.php',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Accept': '*/*',
+                },
+                body: formData
+            })
+            .then(response => console.log(response.json()))
+            .then(response => console.log('test2'))
+            .catch(error => alert(error));
+        // const responseJson = await response.json();
+        // if(responseJson !== null) {
+        //     console.log(responseJson);
+        // }
+        console.log('finish');
+    }
+
     // console.log(reqDescr.text);
-    if(sendingState == 'sent')
+    // if(sendingState == 'sent')
+    // {
+    //     // if(reqCateg != '')
+    //     // {
+    //         let result = DocumentPicker.getDocumentAsync()
+    //         const Mydata = new FormData();
+    //         Mydata.append('file', result);
+    //         console.log('done');
+    //         var formData = new FormData();
+    //         formData.append('categ', reqCateg);
+    //         formData.append('serviceName', '2');
+    //         formData.append('descr', 'value');
+    //         const requestOptions = {
+    //             method: 'POST',
+    //             headers: {'Content-Type': 'application/json'},
+    //             body: formData,
+    //             data: Mydata
+    //         };
+    //         return fetch('https://onerstudiyasy.kz/itsm_create_req.php', requestOptions)
+    //             .then((response) => response.json())
+    //             .then((json) => {
+    //                 console.log(json);
+    //                 //return json;
+    //             })
+    //             .finally(setSendingState('didntsend'))
+    //             .finally(setReqCateg(''));
+    //         setSendingState('didntsend');
+    //     // }
+    // }
+
+    async function chooseFiles()
     {
-        if(reqCateg != '')
-        {
-            DocumentPicker.getDocumentAsync(options)
-            console.log('done');
-            // var formData = new FormData();
-            // formData.append('categ', reqCateg);
-            // formData.append('serviceName', '2');
-            // formData.append('descr', 'value');
-            // const requestOptions = {
-            //     method: 'POST',
-            //     headers: {'Content-Type': 'application/json'},
-            //     body: formData
-            // };
-            // return fetch('https://onerstudiyasy.kz/itsm_create_req.php', requestOptions)
-            //     .then((response) => response.json())
-            //     .then((json) => {
-            //         console.log(json);
-            //         //return json;
-            //     })
-            //     .finally(setSendingState('didntsend'))
-            //     .finally(setReqCateg(''));
-            setSendingState('didntsend');
-        }
+        let result = DocumentPicker.getDocumentAsync({
+            type: "*/*",
+            //type: "image/*",
+            // type: "audio/*",
+            // type: "application/*",
+            // type: "application/pdf",
+            // type: "application/msword",
+            // type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            // type: "vnd.ms-excel",
+            // type: "vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            // type: "text/csv",
+        })
+        const Mydata = new FormData();
+        Mydata.append('file', result);
+        setFile(Mydata);
+        // const dirInfo = FileSystem.getInfoAsync();
+        console.log(result);
     }
 
     return (
@@ -72,15 +122,15 @@ export default function TabTwoScreen() {
             />
           </View>
           <View style={{marginTop: 20}}>
-            <Text>Вложение</Text>
-            <TextInput
+            <Button
                 style={{height: 40, borderColor: 'gray', borderWidth: 1, width: 400}}
-                placeholder="Поиск"
+                title="Выбрать файл"
+                onPress={() => chooseFiles()}
             />
           </View>
           <View style={{marginTop: 20}}>
               <Button
-                  onPress={() => setSendingState('sent')}
+                  onPress={() => sendFile()}
                   title="Отправить"
                   color=""
               />

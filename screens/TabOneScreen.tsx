@@ -84,7 +84,7 @@ export default function TabOneScreen() {
     //выполняется при монтировании активити
     useEffect(() => {
         if(idLoading == true) {
-            fetch('https://portal.skbs.kz/api/service-requests/v1/request?access_token=k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi&fields=id,status_id,descr&expand=status&expand=author')
+            fetch('https://onerstudiyasy.kz/itsm_requests.php')
                 .then(response => response.json())
                 .then(data => setDataJson(data.items))
                 .catch(error => console.error(error))
@@ -96,7 +96,7 @@ export default function TabOneScreen() {
     {
         setCurrentReqItem(itemID)
         setCurrentComponent('request_detail')
-        fetch('https://portal.skbs.kz/api/service-requests/v1/request?access_token=k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi&fields=id,status_id,descr&expand=status&expand=author')
+        fetch('http://82.200.205.235/api/service-requests/v1/request?access_token=k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi&fields=id,status_id,descr&expand=status&expand=author')
             .then(response => response.json())
             .then(data => setDataJson(data.items))
             .catch(error => console.error(error))
@@ -107,7 +107,7 @@ export default function TabOneScreen() {
     const renderItem = ({item}) => (
         <TouchableWithoutFeedback onPress={() => showReqDetail(item.id)}>
             <View style={{flex: 2, flexDirection: 'row', paddingTop: 10}}>
-                <Image style={styles.message_img} source={{uri: 'https://portal.skbs.kz/'+item.author.ava_file}}></Image>
+                <Image style={styles.message_img} source={{uri: 'http://onerstudiyasy.kz/img/'+item.author.ava_file}}></Image>
                 <View style={{flex: 0, flexDirection: 'column', paddingRight: 100, paddingLeft: 20}}>
                     <Text numberOfLines={1} style={{fontSize: 14, color: '#898989', width: 200, fontWeight: 'bold',}}>{item.author.person_name}</Text>
                     <Text style={{fontSize: 10, color: '#898989',}}>Организация: {item.author.company_name}</Text>
