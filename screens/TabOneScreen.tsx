@@ -1,32 +1,214 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { useState, useEffect } from 'react';
+import { StyleSheet, FlatList, SafeAreaView, Image, TextInput, TouchableWithoutFeedback, Button } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import * as DocumentPicker from 'expo-document-picker';
 
 export default function TabOneScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabOneScreen.js" />
-    </View>
-  );
+    const [token, setToken] = useState('');
+    const [dataJson, setDataJson] = useState();
+    const [idLoading, setLoading] = useState(true);
+    const [currentComponent, setCurrentComponent] = useState('all_requests');
+    const [currentARtab, setCurrentARtab] = useState('info');
+    const [currentReqItem, setCurrentReqItem] = useState('info');
+
+    const albumPressed = id =>
+    {
+        setCurrentComponent('request_detail')
+    }
+
+    //элемент флэтЛиста журнал
+    const renderItemJournal = ({item}) => (
+        <TouchableWithoutFeedback onPress={() => albumPressed('22')}>
+            <View style={{flex: 2, flexDirection: 'row', paddingTop: 10}}>
+                <Image style={styles.message_img_small} source={{uri: item.img_source}}></Image>
+                <View style={{flex: 0, flexDirection: 'column', paddingRight: 10, paddingLeft: 2}}>
+                    <Text style={{fontSize: 18, color: '#898989',}}>test</Text>
+                    <Text style={{textAlign: 'right', color: '#898989',}}>test</Text>
+                </View>
+            </View>
+        </TouchableWithoutFeedback>
+    );
+
+    //элемент флэтЛиста
+    const renderItemComment = ({item}) => (
+        <TouchableWithoutFeedback onPress={() => albumPressed('1')}>
+            <View style={{flex: 2, flexDirection: 'row', paddingTop: 10}}>
+                {/*<Image style={styles.message_img_small} source={{uri: item[1].descr}}></Image>*/}
+                <View style={{flex: 0, flexDirection: 'column', paddingRight: 10, paddingLeft: 2}}>
+                    <Text style={{fontSize: 18, color: '#898989',}}>22</Text>
+                    <Text style={{textAlign: 'right', color: '#898989',}}></Text>
+                </View>
+            </View>
+        </TouchableWithoutFeedback>
+    );
+
+    let allReqView =
+        <View style={{flex: 0, flexDirection: 'column', paddingRight: 1, paddingLeft: 20,}}>
+            <Text style={{fontSize: 18, color: '#898989',}}>Услуга</Text>
+            <Text style={{fontSize: 18, color: '#898989',}}>Шаблон обработки заявок</Text>
+        </View>;
+
+    if(currentARtab == 'journal')
+    {
+        allReqView =
+            <View style={{flex: 0, flexDirection: 'column', paddingRight: 1, paddingLeft: 20,}}>
+                <FlatList
+                    data={dataJson}
+                    renderItem={renderItemJournal}
+                    keyExtractor={item => item.id}
+                />
+            </View>
+    }
+    else if (currentARtab == 'comment')
+    {
+        allReqView =
+            <View style={{flex: 0, flexDirection: 'column', paddingRight: 1, paddingLeft: 20,}}>
+                <FlatList
+                    data={dataJson}
+                    renderItem={renderItemComment}
+                    keyExtractor={item => item.items[1].descr}
+                />
+                <TextInput
+                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                    placeholder="Комментарий"
+                />
+                <Button
+                    title="Отправить"
+                />
+            </View>
+    }
+
+    //выполняется при монтировании активити
+    useEffect(() => {
+        if(idLoading == true) {
+            fetch('https://onerstudiyasy.kz/itsm_requests.php')
+                .then(response => response.json())
+                .then(data => setDataJson(data.items))
+                .catch(error => console.error(error))
+                .finally(setLoading(false));
+        }
+    });
+
+    function showReqDetail(itemID)
+    {
+        setCurrentReqItem(itemID)
+        setCurrentComponent('request_detail')
+        fetch('http://82.200.205.235/api/service-requests/v1/request?access_token=k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi&fields=id,status_id,descr&expand=status&expand=author')
+            .then(response => response.json())
+            .then(data => setDataJson(data.items))
+            .catch(error => console.error(error))
+            .finally(setLoading(false));
+    }
+
+    //вьюха одной заявки
+    const renderItem = ({item}) => (
+        <TouchableWithoutFeedback onPress={() => showReqDetail(item.id)}>
+            <View style={{flex: 2, flexDirection: 'row', paddingTop: 10}}>
+                <Image style={styles.message_img} source={{uri: 'http://onerstudiyasy.kz/img/'+item.author.ava_file}}></Image>
+                <View style={{flex: 0, flexDirection: 'column', paddingRight: 100, paddingLeft: 20}}>
+                    <Text numberOfLines={1} style={{fontSize: 14, color: '#898989', width: 200, fontWeight: 'bold',}}>{item.author.person_name}</Text>
+                    <Text style={{fontSize: 10, color: '#898989',}}>Организация: {item.author.company_name}</Text>
+                    <Text numberOfLines={3} style={{fontSize: 12, color: '#898989', width: 280,}}>{item.descr}</Text>
+                </View>
+            </View>
+        </TouchableWithoutFeedback>
+    );
+
+    if(currentComponent == 'all_requests')
+    {
+        return (
+            <SafeAreaView
+                style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'stretch',
+                }}>
+                <View>
+                    <TextInput
+                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                        placeholder="Поиск"
+                    />
+                </View>
+                <FlatList
+                    data={dataJson}
+                    renderItem={renderItem}
+                    // keyExtractor={item => item.items[1].descr}
+                />
+            </SafeAreaView>
+        );
+    }
+        else if (currentComponent == 'request_detail')
+    {
+        return (
+            <View>
+                <Button
+                    onPress={() => setCurrentComponent('all_requests')}
+                    title="Назад"
+                />
+                <View style={{flex: 0, flexDirection: 'row', paddingRight: 100, paddingLeft: 20}}>
+                    <Image style={styles.message_img} source={{uri: 'https://cdn.pixabay.com/photo/2020/06/29/20/31/man-5354308_960_720.png'}}></Image>
+                    <View style={{flex: 0, flexDirection: 'column', paddingRight: 1, paddingLeft: 20,}}>
+                        <Text style={{fontSize: 18, color: '#898989',}}>{currentReqItem}</Text>
+                        <Text style={{fontSize: 12, color: '#898989',}}>Ведущий консультант</Text>
+                    </View>
+                </View>
+                <View style={{flex: 0, flexDirection: 'row', paddingRight: 100, paddingLeft: 20,}}>
+                    <Button
+                        onPress={() => setCurrentARtab('info')}
+                        title="Инфо"
+                        color=""
+                    />
+                    <Button
+                        onPress={() => setCurrentARtab('journal')}
+                        title="Журнал"
+                        color=""
+                    />
+                    <Button
+                        onPress={() => setCurrentARtab('comment')}
+                        title="Комментарии"
+                        color=""
+                    />
+                </View>
+                {allReqView}
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 0,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    item:
+        {
+            flexDirection:'row',
+        },
+    message_img:
+        {
+            width: 80,
+            height: 80,
+            borderRadius: 40,
+        },
+    message_img_small:
+        {
+            width: 20,
+            height: 20,
+            borderRadius: 40,
+        },
+    message_text:
+        {
+            width: 50,
+            height: 50,
+        }
 });
