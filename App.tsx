@@ -2,40 +2,28 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {Text, View, TouchableHighlight, StyleSheet, TextInput, TouchableOpacity, ImageBackground, Image} from 'react-native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
+import TabTwoScreen from "./screens/TabTwoScreen";
+import {RootStackParamList} from "./types";
+import LoginPage from "./components/LoginPage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+  const Stack = createStackNavigator<RootStackParamList>();
   const [token, setToken] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const login = () => {
-    setToken('k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi');
-    // fetch(URL+'login='+email+'&password='+password, {
-    //   method: 'GET',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //     Authorization: token
-    //   }
-    // })
-    //     .then((response) => response.json())
-    //     .then((responseJson) => {
-    //       if(responseJson.token == '')
-    //       {
-    //         alert(`Введен неправильный логин или пароль`);
-    //       }
-    //       else
-    //       {
-    //         setToken(responseJson.token);
-    //       }
-    //     })
-    //     .done();
+  const storeData = async() =>{
+    const value = await AsyncStorage.getItem('token');
+    setToken(value)
   }
 
   if (!isLoadingComplete) {
@@ -43,37 +31,51 @@ export default function App() {
   } else {
     if(token == "")
     {
+    //storeData()
+    console.log(token)
       return (
-          <ImageBackground style={ styles.imgBackground }
+          <ImageBackground style={styles.imgBackground}
                            resizeMode='cover' source={require('./assets/images/backgroung_login_page.jpeg')}>
-                           <View style={styles.containerMain}>
-            <Image style={{marginTop: -200}} source={require('./assets/images/logo-sk-v-150.png')}></Image>
-           <TextInput
-               style={styles.inputText}
-               value={email}
-               placeholder="Email..."
-               placeholderTextColor="#003f5c"
-               onChangeText={text => setEmail(text)}
-           />
-           <TextInput
-               style={styles.inputText}
-               value={password}
-               secureTextEntry={true}
-               placeholder="Password..."
-               placeholderTextColor="#003f5c"
-               onChangeText={text => setPassword(text)}
-           />
-           <TouchableOpacity
-               style={styles.loginBtn}
-               onPress={login}
-           >
-             <Text style={styles.loginText}>Войти</Text>
-           </TouchableOpacity>
-            <View style={styles.bottomView}>
+            <View style={styles.containerMain}>
+              <Image style={{marginTop: -200}} source={require('./assets/images/logo-sk-v-150.png')}></Image>
+              <TextInput
+                  style={styles.inputText}
+                  value={email}
+                  placeholder="Email..."
+                  placeholderTextColor="#003f5c"
+                  onChangeText={text => setEmail(text)}
+              />
+              <TextInput
+                  style={styles.inputText}
+                  value={password}
+                  secureTextEntry={true}
+                  placeholder="Password..."
+                  placeholderTextColor="#003f5c"
+                  onChangeText={text => setPassword(text)}
+              />
+              <TouchableOpacity
+                  style={styles.loginBtn}
+                  onPress={storeData}
+              >
+                <Text style={styles.loginText}>Войти</Text>
+              </TouchableOpacity>
+              <View style={styles.bottomView}>
 
+              </View>
             </View>
-          </View>
           </ImageBackground>
+          // <View><Text>test</Text></View>
+        //   <SafeAreaProvider>
+        //   <NavigationContainer>
+        //     <Stack.Navigator>
+        //       <Stack.Screen
+        //           name="LoginPage"
+        //           component={LoginPage}
+        //           options={{ title: 'Welcome' }}
+        //       />
+        //     </Stack.Navigator>
+        //   </NavigationContainer>
+        // </SafeAreaProvider>
       );
     }
       else
