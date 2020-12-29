@@ -16,11 +16,16 @@ export default function TabTwoScreen() {
     const [reqDescr, setReqDescr] = useState("");
     const [file, setFile] = useState();
 
-    async function sendFile(){
+    async function sendFile()
+    {
         // console.log('response');
-        // console.log(file);
+        console.log(file);
+        console.log(file['_parts'][0][1]['_W']['name']);
+        var name = file['_parts'][0][1]['_W']['name'];
+        var size = file['_parts'][0][1]['_W']['size'];
+        var uri = file['_parts'][0][1]['_W']['uri'];
         let formData = new FormData();
-        formData.append('file', { uri: 'file:///Users/ilyaaaas/Library/Developer/CoreSimulator/Devices/98C3E053-1B98-4E23-9D3A-7018D99A2295/data/Containers/Data/Application/D7239EE2-4A75-4796-BA3F-68CE457C9BFA/Library/Caches/ExponentExperienceData/%2540anonymous%252Ffooter_tabs-a89cd3b3-e1de-40cf-8b23-f43483a8d726/DocumentPicker/F3C63C44-BA87-40E3-80D0-3E67E29A3D5C.JPG', name: 'IMG_0007.JPG', size: 94611, type: 'JPG' });
+        formData.append('file', { uri: uri, name: name, size: size, type: 'JPG' });
         // console.log(formData);
         const response = await fetch(
             'https://onerstudiyasy.kz/itsm_create_req.php',

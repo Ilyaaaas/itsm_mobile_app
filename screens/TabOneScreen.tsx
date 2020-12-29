@@ -96,7 +96,7 @@ export default function TabOneScreen() {
     {
         setCurrentReqItem(itemID)
         setCurrentComponent('request_detail')
-        fetch('http://82.200.205.235/api/service-requests/v1/request?access_token=k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi&fields=id,status_id,descr&expand=status&expand=author')
+        fetch('https://portal.skbs.kz/api/service-requests/v1/request?access_token=k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi&fields=id,status_id,descr&expand=status&expand=author')
             .then(response => response.json())
             .then(data => setDataJson(data.items))
             .catch(error => console.error(error))
