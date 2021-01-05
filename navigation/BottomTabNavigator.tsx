@@ -21,28 +21,28 @@ export default function BottomTabNavigator() {
       initialRouteName="TabOne"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
-        name="TabOne"
+        name="Заявки"
         component={TabOneNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Создать"
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
       />
         <BottomTab.Screen
-            name="TabThree"
+            name="Сервисы"
             component={TabThreeScreen}
             options={{
                 tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
             }}
         />
         <BottomTab.Screen
-            name="TabFour"
+            name="Профиль"
             component={TabFourScreen}
             options={{
                 tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
@@ -68,7 +68,7 @@ function TabOneNavigator() {
       <TabOneStack.Screen
         name="TabOneScreen"
         component={TabOneScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+        options={{ headerTitle: 'Заявки' }}
       />
     </TabOneStack.Navigator>
   );
@@ -82,7 +82,7 @@ function TabTwoNavigator() {
       <TabTwoStack.Screen
         name="TabTwoScreen"
         component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+        options={{ headerTitle: 'Создать заявку' }}
       />
     </TabTwoStack.Navigator>
   );
@@ -96,7 +96,7 @@ function TabThreeNavigator() {
       <TabThreeStack.Screen
         name="TabThreeScreen"
         component={TabThreeScreen}
-        options={{ headerTitle: 'Tab Three Title' }}
+        options={{ headerTitle: 'Сервисы' }}
       />
     </TabThreeStack.Navigator>
   );

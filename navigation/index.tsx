@@ -32,3 +32,4 @@ function RootNavigator() {
     </Stack.Navigator>
   );
 }
+
