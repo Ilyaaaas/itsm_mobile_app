@@ -23,10 +23,10 @@ export default function App() {
           style={styles.container}
       >
         <View style={{height: 200, flex: 0, flexDirection: 'column', alignItems: 'center'}}>
-          <Image style={styles.message_img} source={{uri: 'https://webuildthemes.com/go/assets/images/demo/user-1.jpg'}}></Image>
+          <Image style={styles.message_img} source={require('../assets/images/Done.jpg')}></Image>
           <View style={{flex: 0, flexDirection: 'column', alignItems: 'center'}}>
-            <Text style={{fontSize: 22, color: '#898989',}}>Имя Фамилия</Text>
-            <Text style={{fontSize: 14, color: '#898989',}}>Должность</Text>
+            <Text style={{fontSize: 22, color: '#898989',}}>Ахметов Ильяс</Text>
+            <Text style={{fontSize: 14, color: '#898989',}}>Разработчик</Text>
           </View>
         </View>
         <View style={{flex: 0, paddingRight: 10, paddingLeft: 10}}>
