@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { StyleSheet, FlatList, SafeAreaView, Image, TextInput, TouchableWithoutFeedback, Button } from 'react-native';
+import { Container, Header, Tab, Tabs, ScrollableTab, TabHeading, Icon, Textarea, Form } from 'native-base';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -158,22 +159,46 @@ export default function TabOneScreen() {
                         <Text style={{fontSize: 12, color: '#898989',}}>Ведущий консультант</Text>
                     </View>
                 </View>
-                <View style={{flex: 0, flexDirection: 'row', paddingRight: 100, paddingLeft: 20,}}>
-                    <Button
-                        onPress={() => setCurrentARtab('info')}
-                        title="Инфо"
-                        color=""
-                    />
-                    <Button
-                        onPress={() => setCurrentARtab('journal')}
-                        title="Журнал"
-                        color=""
-                    />
-                    <Button
-                        onPress={() => setCurrentARtab('comment')}
-                        title="Комментарии"
-                        color=""
-                    />
+                <View style={{flexDirection: 'row',}}>
+                    <Container>
+                        <Tabs style={{backgroundColor: '#fff'}}>
+                            <Tab heading={ <TabHeading><Text>Информация</Text></TabHeading>}>
+                                <Text style={{padding: 10,}}>
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                                    when an unknown printer took a galley of type and scrambled it to make a type
+                                    specimen book. It has survived not only five centuries, but also the leap into
+                                    electronic typesetting, remaining essentially unchanged. It was popularised in
+                                    the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                                    and more recently with desktop publishing software like Aldus PageMaker including
+                                    versions of Lorem Ipsum.</Text>
+                            </Tab>
+                            <Tab heading={ <TabHeading><Text>Журнал</Text></TabHeading>}>
+                                <View style={{flex: 0, flexDirection: 'column', paddingRight: 1, paddingLeft: 20,}}>
+                                    <FlatList
+                                        data={dataJson}
+                                        renderItem={renderItemJournal}
+                                        keyExtractor={item => item.id}
+                                    />
+                                </View>
+                            </Tab>
+                            <Tab heading={ <TabHeading><Text>Комментарии</Text></TabHeading>}>
+                                <View style={{flex: 0, flexDirection: 'column', padding: 10,}}>
+                                    {/*<FlatList*/}
+                                    {/*    data={dataJson}*/}
+                                    {/*    renderItem={renderItemComment}*/}
+                                    {/*    keyExtractor={item => item.items[1].descr}*/}
+                                    {/*/>*/}
+                                    <Form>
+                                        <Textarea rowSpan={5} bordered placeholder="Textarea" />
+                                    </Form>
+                                    <Button
+                                        title="Отправить"
+                                    />
+                                </View>
+                            </Tab>
+                        </Tabs>
+                    </Container>
                 </View>
                 {allReqView}
             </View>
