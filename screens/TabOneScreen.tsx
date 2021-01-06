@@ -46,42 +46,6 @@ export default function TabOneScreen() {
         </TouchableWithoutFeedback>
     );
 
-    let allReqView =
-        <View style={{flex: 0, flexDirection: 'column', paddingRight: 1, paddingLeft: 20,}}>
-            <Text style={{fontSize: 18, color: '#898989',}}>Услуга</Text>
-            <Text style={{fontSize: 18, color: '#898989',}}>Шаблон обработки заявок</Text>
-        </View>;
-
-    if(currentARtab == 'journal')
-    {
-        allReqView =
-            <View style={{flex: 0, flexDirection: 'column', paddingRight: 1, paddingLeft: 20,}}>
-                <FlatList
-                    data={dataJson}
-                    renderItem={renderItemJournal}
-                    keyExtractor={item => item.id}
-                />
-            </View>
-    }
-    else if (currentARtab == 'comment')
-    {
-        allReqView =
-            <View style={{flex: 0, flexDirection: 'column', paddingRight: 1, paddingLeft: 20,}}>
-                <FlatList
-                    data={dataJson}
-                    renderItem={renderItemComment}
-                    keyExtractor={item => item.items[1].descr}
-                />
-                <TextInput
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                    placeholder="Комментарий"
-                />
-                <Button
-                    title="Отправить"
-                />
-            </View>
-    }
-
     //выполняется при монтировании активити
     useEffect(() => {
         if(idLoading == true) {
@@ -200,7 +164,6 @@ export default function TabOneScreen() {
                         </Tabs>
                     </Container>
                 </View>
-                {allReqView}
             </View>
         );
     }

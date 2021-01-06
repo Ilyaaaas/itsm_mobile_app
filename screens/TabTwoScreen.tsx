@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {KeyboardAvoidingView, Button, TouchableOpacity, Image, StyleSheet, TextInput, Picker, Platform, Keyboard, TouchableWithoutFeedback, ScrollView, SafeAreaView} from 'react-native';
+import {KeyboardAvoidingView, TouchableOpacity, Image, StyleSheet, TextInput, Picker, Platform, Keyboard, TouchableWithoutFeedback, ScrollView, SafeAreaView} from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -8,6 +8,7 @@ import {useState} from "react";
 // import Camera from 'react-native-camera';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import { Container, Header, Content, Textarea, Form, Button, Icon, ActionSheet } from "native-base";
 
 export default function TabTwoScreen() {
     const [sendingState, setSendingState] = useState('didntsend');
@@ -15,6 +16,9 @@ export default function TabTwoScreen() {
     const [reqCateg, setReqCateg] = useState("");
     const [reqDescr, setReqDescr] = useState("");
     const [file, setFile] = useState();
+    var BUTTONS = ["Option 0", "Option 1", "Option 2", "Delete", "Cancel"];
+    var DESTRUCTIVE_INDEX = 3;
+    var CANCEL_INDEX = 4;
 
     async function sendFile()
     {
@@ -100,13 +104,12 @@ export default function TabTwoScreen() {
     }
 
     return (
-        <ScrollView
-            style={styles.container}>
-          <View style={{marginTop: -100, height: 100}}>
-                <Text style={{flexDirection: 'row'}}>Выберите каталог</Text>
+        <ScrollView style={styles.container}>
+            <View style={{}}>
+              <View>
+                  <Text>Выберите каталог</Text>
                   <Picker
                       selectedValue={reqCateg}
-                      style={styles.dropdown_inp}
                       onValueChange={(itemValue, itemIndex) => setReqCateg(itemValue)}
                   >
                       <Picker.Item label="" value="" />
@@ -115,31 +118,27 @@ export default function TabTwoScreen() {
                       <Picker.Item label="Программное обеспечение" value="3" />
                       <Picker.Item label="Другие услуги" value="4" />
                   </Picker>
-          </View>
-          <View style={{marginTop: 20}}>
-            <Text>Опишите услугу</Text>
-            <TextInput
-                // multiline={true}
-                numberOfLines={3}
-                onChangeText={(text) => setReqDescr({text})}
-                style={{height: 120, borderColor: 'gray', borderWidth: 1, width: 400}}
-                placeholder="Поиск"
-            />
-          </View>
-          <View style={{marginTop: 20}}>
-            <Button
-                style={{height: 40, borderColor: 'gray', borderWidth: 1, width: 400}}
-                title="Выбрать файл"
-                onPress={() => chooseFiles()}
-            />
-          </View>
-          <View style={{marginTop: 20}}>
-              <Button
-                  onPress={() => sendFile()}
-                  title="Отправить"
-                  color=""
-              />
-          </View>
+              </View>
+              <View>
+                <Text>Опишите услугу</Text>
+                  <Form>
+                      <Textarea rowSpan={5} bordered placeholder="Textarea" />
+                  </Form>
+              </View>
+              <View style={{marginTop: 20}}>
+                  <Button full primary
+                          onPress={() => chooseFiles()}>
+                      <Icon name='paper' />
+                      <Text style={{color: '#fff'}}>Выбрать файл</Text>
+                  </Button>
+              </View>
+              <View style={{marginTop: 20}}>
+                  <Button full primary
+                          onPress={() => sendFile()}>
+                      <Text style={{color: '#fff'}}>Отправить</Text>
+                  </Button>
+              </View>
+            </View>
       </ScrollView>
     );
 }
@@ -148,6 +147,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
+        borderWidth: 1,
+        flexDirection: 'column',
     },
     preview: {
         flex: 1,
@@ -159,37 +160,24 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 5,
         color: '#000',
-        padding: 10,
-        margin: 40
     },
-  // container: {
-  //   flex: 1,
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   marginTop: -100,
-  //   paddingTop: -100,
-  //   backgroundColor: 'white'
-  // },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
   },
   separator: {
-    marginVertical: 30,
     height: 1,
-    width: '80%',
   },
     dropdown_inp:
     {
         ...Platform.select({
             ios: {
-                height: 35, width: 150, marginTop: -20, width: 400,
+                height: 35, marginTop: -20,
             },
             android: {
-                height: 20, width: 150, paddingBottom: 40, width: 400,
+                height: 20, paddingBottom: 40,
             },
             default: {
-                // other platforms, web for example
                 backgroundColor: 'blue'
             }
         }),
