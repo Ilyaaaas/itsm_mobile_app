@@ -84,8 +84,10 @@ export default function TabOneScreen() {
     //выполняется при монтировании активити
     useEffect(() => {
         if(idLoading == true) {
+            // fetch('http://portal.skbs.kz/api/service-requests/v1/request?access_token=k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi')
             fetch('https://onerstudiyasy.kz/itsm_requests.php')
                 .then(response => response.json())
+                // .then(data => console.log(data))
                 .then(data => setDataJson(data.items))
                 .catch(error => console.error(error))
                 .finally(setLoading(false));
@@ -150,7 +152,7 @@ export default function TabOneScreen() {
                     title="Назад"
                 />
                 <View style={{flex: 0, flexDirection: 'row', paddingRight: 100, paddingLeft: 20}}>
-                    <Image style={styles.message_img} source={{uri: 'https://cdn.pixabay.com/photo/2020/06/29/20/31/man-5354308_960_720.png'}}></Image>
+                    <Image style={styles.message_img} source={require('../assets/images/Done.jpg')}></Image>
                     <View style={{flex: 0, flexDirection: 'column', paddingRight: 1, paddingLeft: 20,}}>
                         <Text style={{fontSize: 18, color: '#898989',}}>{currentReqItem}</Text>
                         <Text style={{fontSize: 12, color: '#898989',}}>Ведущий консультант</Text>

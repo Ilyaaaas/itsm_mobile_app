@@ -9,8 +9,8 @@ import { Col, Row, Grid } from 'react-native-easy-grid';
 export default function TabThreeScreen() {
   return (
       <Container>
-        <Header />
-        <CardItem>
+        {/*<Header />*/}
+        <CardItem style={{marginTop: 50}}>
           <Left>
             <Thumbnail source={require('../assets/images/Done.jpg')} />
             <Body>
@@ -34,19 +34,10 @@ export default function TabThreeScreen() {
               <CardItem>
                 <Left>
                   <Button transparent>
-                    <Icon active name="thumbs-up" />
-                    <Text>12 Likes</Text>
+                    <Icon active name="pie" />
+                    <Text>5 графиков</Text>
                   </Button>
                 </Left>
-                <Body>
-                  <Button transparent>
-                    <Icon active name="chatbubbles" />
-                    <Text>4 Comments</Text>
-                  </Button>
-                </Body>
-                <Right>
-                  <Text>11h ago</Text>
-                </Right>
               </CardItem>
             </Card>
             <Card>
@@ -58,24 +49,15 @@ export default function TabThreeScreen() {
                 </Left>
               </CardItem>
               <CardItem cardBody>
-                <Image source={require('../assets/images/chart.png')} style={{height: 200, width: null, flex: 1}}/>
+                <Image source={{uri: 'https://media.istockphoto.com/vectors/flat-design-concept-message-and-chat-present-by-icon-text-message-vector-id963195038?k=6&m=963195038&s=170667a&w=0&h=2ehEvnY7OyeqeBbZ6rJEzgEL1v5svdpxRM-pVDMI5gw='}} style={{height: 200, width: null, flex: 1}}/>
               </CardItem>
               <CardItem>
                 <Left>
                   <Button transparent>
-                    <Icon active name="thumbs-up" />
-                    <Text>12 Likes</Text>
+                    <Icon active name="chatbubbles" />
+                    <Text>4 новых</Text>
                   </Button>
                 </Left>
-                <Body>
-                  <Button transparent>
-                    <Icon active name="chatbubbles" />
-                    <Text>4 Comments</Text>
-                  </Button>
-                </Body>
-                <Right>
-                  <Text>11h ago</Text>
-                </Right>
               </CardItem>
             </Card>
           </Col>
@@ -89,24 +71,15 @@ export default function TabThreeScreen() {
                 </Left>
               </CardItem>
               <CardItem cardBody>
-                <Image source={{uri: 'https://webuildthemes.com/go/assets/images/demo/user-1.jpg'}} style={{height: 200, width: null, flex: 1}}/>
+                <Image source={require('../assets/images/pie.png')} style={{height: 200, width: null, flex: 1}}/>
               </CardItem>
               <CardItem>
                 <Left>
                   <Button transparent>
-                    <Icon active name="thumbs-up" />
-                    <Text>12 Likes</Text>
+                    <Icon active name="pulse" />
+                    <Text>2 отчета</Text>
                   </Button>
                 </Left>
-                <Body>
-                  <Button transparent>
-                    <Icon active name="chatbubbles" />
-                    <Text>4 Comments</Text>
-                  </Button>
-                </Body>
-                <Right>
-                  <Text>11h ago</Text>
-                </Right>
               </CardItem>
             </Card>
             <Card>
@@ -118,96 +91,20 @@ export default function TabThreeScreen() {
                 </Left>
               </CardItem>
               <CardItem cardBody>
-                <Image source={{uri: 'https://webuildthemes.com/go/assets/images/demo/user-1.jpg'}} style={{height: 200, width: null, flex: 1}}/>
+                <Image source={{uri: 'https://www.pngrepo.com/png/228811/512/feeder.png'}} style={{height: 200, width: null, flex: 1}}/>
               </CardItem>
               <CardItem>
                 <Left>
                   <Button transparent>
-                    <Icon active name="thumbs-up" />
-                    <Text>12 Likes</Text>
+                    <Icon active name="settings"/>
+                    <Text>7 достуных функций</Text>
                   </Button>
                 </Left>
-                <Body>
-                  <Button transparent>
-                    <Icon active name="chatbubbles" />
-                    <Text>4 Comments</Text>
-                  </Button>
-                </Body>
-                <Right>
-                  <Text>11h ago</Text>
-                </Right>
               </CardItem>
             </Card>
           </Col>
         </Grid>
       </Container>
-      // <Container>
-      //   <Header />
-      //   <Content style={{flexDirection: 'column',  flex: 1}}>
-      //     <Card style={styles.card}>
-      //       <CardItem>
-      //         <Left>
-      //           <Thumbnail source={{uri: 'https://webuildthemes.com/go/assets/images/demo/user-1.jpg'}} />
-      //           <Body>
-      //             <Text>NativeBase</Text>
-      //             <Text note>GeekyAnts</Text>
-      //           </Body>
-      //         </Left>
-      //       </CardItem>
-      //       <CardItem cardBody>
-      //         <Image source={{uri: 'https://webuildthemes.com/go/assets/images/demo/user-1.jpg'}} style={{height: 200, width: null, flex: 1}}/>
-      //       </CardItem>
-      //       <CardItem>
-      //         <Left>
-      //           <Button transparent>
-      //             <Icon active name="thumbs-up" />
-      //             <Text>12 Likes</Text>
-      //           </Button>
-      //         </Left>
-      //         <Body>
-      //           <Button transparent>
-      //             <Icon active name="chatbubbles" />
-      //             <Text>4 Comments</Text>
-      //           </Button>
-      //         </Body>
-      //         <Right>
-      //           <Text>11h ago</Text>
-      //         </Right>
-      //       </CardItem>
-      //     </Card>
-      //     <Card style={styles.card}>
-      //       <CardItem>
-      //         <Left>
-      //           <Thumbnail source={{uri: 'https://webuildthemes.com/go/assets/images/demo/user-1.jpg'}} />
-      //           <Body>
-      //             <Text>NativeBase</Text>
-      //             <Text note>GeekyAnts</Text>
-      //           </Body>
-      //         </Left>
-      //       </CardItem>
-      //       <CardItem cardBody>
-      //         <Image source={{uri: 'https://webuildthemes.com/go/assets/images/demo/user-1.jpg'}} style={{height: 200, width: null, flex: 1}}/>
-      //       </CardItem>
-      //       <CardItem>
-      //         <Left>
-      //           <Button transparent>
-      //             <Icon active name="thumbs-up" />
-      //             <Text>12 Likes</Text>
-      //           </Button>
-      //         </Left>
-      //         <Body>
-      //           <Button transparent>
-      //             <Icon active name="chatbubbles" />
-      //             <Text>4 Comments</Text>
-      //           </Button>
-      //         </Body>
-      //         <Right>
-      //           <Text>11h ago</Text>
-      //         </Right>
-      //       </CardItem>
-      //     </Card>
-      //   </Content>
-      // </Container>
   );
 }
 
