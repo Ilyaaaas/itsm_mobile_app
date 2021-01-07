@@ -17,13 +17,12 @@ export default function App() {
     const [currentIndex, setCurrentIndex] = React.useState(null);
     const ref = React.useRef();
     const dataArray = [
-        { title: "Контакты", content: <TextInput style={{height: 40, borderColor: 'gray'}} placeholder='Поиск'/> },
+        { title: "Контакты", content: <TextInput style={{height: 40, borderColor: 'white'}} placeholder='Поиск'/> },
         { title: "Настройки", content: "Lorem ipsum dolor sit amet" },
         { title: "Уведомления", content: "Lorem ipsum dolor sit amet" }
     ];
 
     return (
-
         <Container>
             <View style={{flex: 0, flexDirection: 'column', alignItems: 'center', marginTop: 50}}>
                 <Image style={styles.message_img} source={require('../assets/images/Done.jpg')}></Image>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Image } from 'react-native';
+import {StyleSheet, Image, ScrollView} from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -18,6 +18,7 @@ export default function TabThreeScreen() {
             </Body>
           </Left>
         </CardItem>
+        <ScrollView>
         <Grid>
           <Col>
             <Card>
@@ -104,6 +105,7 @@ export default function TabThreeScreen() {
             </Card>
           </Col>
         </Grid>
+      </ScrollView>
       </Container>
   );
 }

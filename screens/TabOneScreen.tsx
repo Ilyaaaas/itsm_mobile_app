@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { StyleSheet, FlatList, SafeAreaView, Image, TextInput, TouchableWithoutFeedback, Button } from 'react-native';
-import { Container, Header, Tab, Tabs, ScrollableTab, TabHeading, Icon, Textarea, Form } from 'native-base';
+import { StyleSheet, FlatList, SafeAreaView, Image, TextInput, TouchableWithoutFeedback } from 'react-native';
+import { Container, Header, Tab, Tabs, ScrollableTab, TabHeading, Icon, Textarea, Form, Button } from 'native-base';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -48,11 +48,27 @@ export default function TabOneScreen() {
 
     //выполняется при монтировании активити
     useEffect(() => {
+        // if(idLoading == true) {
+        //     // fetch('http://portal.skbs.kz/api/service-requests/v1/request?access_token=k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi')
+        //     fetch('https://onerstudiyasy.kz/itsm_requests.php')
+        //         .then(response => response.json())
+        //         // .then(data => console.log(data))
+        //         .then(data => setDataJson(data.items))
+        //         .catch(error => console.error(error))
+        //         .finally(setLoading(false));
+        // }
+
         if(idLoading == true) {
-            // fetch('http://portal.skbs.kz/api/service-requests/v1/request?access_token=k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi')
-            fetch('https://onerstudiyasy.kz/itsm_requests.php')
+            fetch('http://portal.skbs.kz/api/service-requests/v1/request?access_token=k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi&fields=id,status_id,descr&expand=status&expand=author',
+                {
+                    // method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
                 .then(response => response.json())
-                // .then(data => console.log(data))
+                // .then(data => console.log(data.items))
                 .then(data => setDataJson(data.items))
                 .catch(error => console.error(error))
                 .finally(setLoading(false));
@@ -74,7 +90,7 @@ export default function TabOneScreen() {
     const renderItem = ({item}) => (
         <TouchableWithoutFeedback onPress={() => showReqDetail(item.id)}>
             <View style={{flex: 2, flexDirection: 'row', paddingTop: 10}}>
-                <Image style={styles.message_img} source={{uri: 'http://onerstudiyasy.kz/img/'+item.author.ava_file}}></Image>
+                <Image style={styles.message_img} source={{uri: 'http://portal.skbs.kz/'+item.author.ava_file}}></Image>
                 <View style={{flex: 0, flexDirection: 'column', paddingRight: 100, paddingLeft: 20}}>
                     <Text numberOfLines={1} style={{fontSize: 14, color: '#898989', width: 200, fontWeight: 'bold',}}>{item.author.person_name}</Text>
                     <Text style={{fontSize: 10, color: '#898989',}}>Организация: {item.author.company_name}</Text>
@@ -105,6 +121,18 @@ export default function TabOneScreen() {
                     renderItem={renderItem}
                     // keyExtractor={item => item.items[1].descr}
                 />
+                <View style={{flexDirection: 'row'}}>
+                    <View style={{alignSelf: 'flex-start'}}>
+                        <Button>
+                            <Icon name='arrow-back'/>
+                        </Button>
+                    </View>
+                    <View style={{position: 'absolute', right: 0}}>
+                        <Button>
+                            <Icon name='arrow-forward' />
+                        </Button>
+                    </View>
+                </View>
             </SafeAreaView>
         );
     }
