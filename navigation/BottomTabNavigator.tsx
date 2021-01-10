@@ -24,28 +24,28 @@ export default function BottomTabNavigator() {
         name="Заявки"
         component={TabOneNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-albums" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="Создать"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-add-circle" color={color} />,
         }}
       />
         <BottomTab.Screen
             name="Сервисы"
             component={TabThreeScreen}
             options={{
-                tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+                tabBarIcon: ({ color }) => <TabBarIcon name="ios-construct" color={color} />,
             }}
         />
         <BottomTab.Screen
             name="Профиль"
             component={TabFourScreen}
             options={{
-                tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+                tabBarIcon: ({ color }) => <TabBarIcon name="ios-person" color={color} />,
             }}
         />
     </BottomTab.Navigator>
