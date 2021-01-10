@@ -116,23 +116,19 @@ export default function TabOneScreen() {
                         placeholder="Поиск"
                     />
                 </View>
+                <View style={{flexDirection: 'row'}}>
+                    <Button onPress={() => alert('prev page')}>
+                        <Icon name='arrow-back'/>
+                    </Button>
+                    <Button style={{position: 'absolute', right: 0}} onPress={() => alert('next page')}>
+                        <Icon name='arrow-forward' />
+                    </Button>
+                </View>
                 <FlatList
                     data={dataJson}
                     renderItem={renderItem}
                     // keyExtractor={item => item.items[1].descr}
                 />
-                <View style={{flexDirection: 'row'}}>
-                    <View style={{alignSelf: 'flex-start'}}>
-                        <Button>
-                            <Icon name='arrow-back'/>
-                        </Button>
-                    </View>
-                    <View style={{position: 'absolute', right: 0}}>
-                        <Button>
-                            <Icon name='arrow-forward' />
-                        </Button>
-                    </View>
-                </View>
             </SafeAreaView>
         );
     }
