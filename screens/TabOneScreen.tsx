@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { StyleSheet, FlatList, SafeAreaView, Image, TextInput, TouchableWithoutFeedback } from 'react-native';
-import { Container, Header, Tab, Tabs, ScrollableTab, TabHeading, Icon, Textarea, Form, Button } from 'native-base';
+import { Container, Header, Tab, Tabs, ScrollableTab, TabHeading, Icon, Textarea, Form, Button, Input, Item, Label } from 'native-base';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -10,10 +10,13 @@ import * as DocumentPicker from 'expo-document-picker';
 export default function TabOneScreen() {
     const [token, setToken] = useState('');
     const [dataJson, setDataJson] = useState();
+    const [dataFilteredJson, setDataFilteredJson] = useState();
     const [idLoading, setLoading] = useState(true);
+    const [searchInpIsempty, setIsearchInpIsempty] = useState(true);
     const [currentComponent, setCurrentComponent] = useState('all_requests');
     const [currentARtab, setCurrentARtab] = useState('info');
     const [currentReqItem, setCurrentReqItem] = useState('info');
+    const [filteredWord, setFilteredWord] = useState('');
 
     const albumPressed = id =>
     {
@@ -72,18 +75,45 @@ export default function TabOneScreen() {
                 .then(data => setDataJson(data.items))
                 .catch(error => console.error(error))
                 .finally(setLoading(false));
+            console.log('useEffect')
         }
     });
 
     function showReqDetail(itemID)
     {
-        setCurrentReqItem(itemID)
         setCurrentComponent('request_detail')
         fetch('https://portal.skbs.kz/api/service-requests/v1/request?access_token=k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi&fields=id,status_id,descr&expand=status&expand=author')
             .then(response => response.json())
             .then(data => setDataJson(data.items))
             .catch(error => console.error(error))
-            .finally(setLoading(false));
+            .then(setLoading(false))
+            .finally(data => setDataFilteredJson(data.items))
+    }
+
+    function searchFilterFunction(text)
+    {
+        if (text) {
+            const newData = dataJson.filter(
+                function (item) {
+                    console.log(item.descr);
+                    const itemData = item.descr;
+                    const textData = text;
+                    return itemData.indexOf(textData) > -1;
+                });
+            console.log(newData)
+        }
+    }
+
+    function searchRequest(searchText)
+    {
+        let data = dataJson;
+        data = data.filter(function(item){
+            return item.descr.includes(searchText.text);
+        }).map(function({id, descr, author, status_id}){
+            return {id, descr, author, status_id};
+        });
+        // setDataJson(data)
+        setDataFilteredJson(data)
     }
 
     //вьюха одной заявки
@@ -102,6 +132,13 @@ export default function TabOneScreen() {
 
     if(currentComponent == 'all_requests')
     {
+        let dataForRender = dataJson
+        if(searchInpIsempty)
+        {
+            alert('test')
+            dataForRender = dataFilteredJson
+            setIsearchInpIsempty(false)
+        }
         return (
             <SafeAreaView
                 style={{
@@ -111,10 +148,9 @@ export default function TabOneScreen() {
                     alignItems: 'stretch',
                 }}>
                 <View>
-                    <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                        placeholder="Поиск"
-                    />
+                    <Item rounded>
+                        <Input style={{height: 40, borderColor: 'gray', borderWidth: 1}} placeholder="Поиск" onChangeText={text => searchRequest({text})}/>
+                    </Item>
                 </View>
                 <View style={{flexDirection: 'row'}}>
                     <Button onPress={() => alert('prev page')}>
@@ -125,7 +161,7 @@ export default function TabOneScreen() {
                     </Button>
                 </View>
                 <FlatList
-                    data={dataJson}
+                    data={dataForRender}
                     renderItem={renderItem}
                     // keyExtractor={item => item.items[1].descr}
                 />
@@ -137,9 +173,11 @@ export default function TabOneScreen() {
         return (
             <View>
                 <Button
+                    block
                     onPress={() => setCurrentComponent('all_requests')}
-                    title="Назад"
-                />
+                >
+                    <Text>Назад</Text>
+                </Button>
                 <View style={{flex: 0, flexDirection: 'row', paddingRight: 100, paddingLeft: 20}}>
                     <Image style={styles.message_img} source={require('../assets/images/Done.jpg')}></Image>
                     <View style={{flex: 0, flexDirection: 'column', paddingRight: 1, paddingLeft: 20,}}>
