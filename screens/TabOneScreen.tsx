@@ -17,6 +17,7 @@ export default function TabOneScreen() {
     const [currentARtab, setCurrentARtab] = useState('info');
     const [currentReqItem, setCurrentReqItem] = useState('info');
     const [filteredWord, setFilteredWord] = useState('');
+    const [renderCount, setRenderCount] = useState(0);
 
     const albumPressed = id =>
     {
@@ -31,19 +32,6 @@ export default function TabOneScreen() {
                 <View style={{flex: 0, flexDirection: 'column', paddingRight: 10, paddingLeft: 2}}>
                     <Text style={{fontSize: 18, color: '#898989',}}>test</Text>
                     <Text style={{textAlign: 'right', color: '#898989',}}>test</Text>
-                </View>
-            </View>
-        </TouchableWithoutFeedback>
-    );
-
-    //элемент флэтЛиста
-    const renderItemComment = ({item}) => (
-        <TouchableWithoutFeedback onPress={() => albumPressed('1')}>
-            <View style={{flex: 2, flexDirection: 'row', paddingTop: 10}}>
-                {/*<Image style={styles.message_img_small} source={{uri: item[1].descr}}></Image>*/}
-                <View style={{flex: 0, flexDirection: 'column', paddingRight: 10, paddingLeft: 2}}>
-                    <Text style={{fontSize: 18, color: '#898989',}}>22</Text>
-                    <Text style={{textAlign: 'right', color: '#898989',}}></Text>
                 </View>
             </View>
         </TouchableWithoutFeedback>
@@ -84,10 +72,20 @@ export default function TabOneScreen() {
         setCurrentComponent('request_detail')
         fetch('https://portal.skbs.kz/api/service-requests/v1/request?access_token=k1LLvTkV9FVwKlKwc047mhdi6sy2vXyi&fields=id,status_id,descr&expand=status&expand=author')
             .then(response => response.json())
-            .then(data => setDataJson(data.items))
+            // .then(data => setArrays(data))
+            .then(function(data){
+                setDataJson(data.items)
+                setDataFilteredJson(data.items)
+            })
             .catch(error => console.error(error))
             .then(setLoading(false))
             .finally(data => setDataFilteredJson(data.items))
+    }
+
+    function setArrays(data)
+    {
+        setDataJson(data.items)
+        setDataFilteredJson(data.items)
     }
 
     function searchFilterFunction(text)
@@ -112,8 +110,17 @@ export default function TabOneScreen() {
         }).map(function({id, descr, author, status_id}){
             return {id, descr, author, status_id};
         });
-        // setDataJson(data)
         setDataFilteredJson(data)
+    }
+
+    function getRenderArray()
+    {
+        let dataForRender = dataFilteredJson
+        if(dataFilteredJson == undefined)
+        {
+            dataForRender = dataJson
+        }
+        return dataForRender;
     }
 
     //вьюха одной заявки
@@ -132,13 +139,9 @@ export default function TabOneScreen() {
 
     if(currentComponent == 'all_requests')
     {
-        let dataForRender = dataJson
-        if(searchInpIsempty)
-        {
-            alert('test')
-            dataForRender = dataFilteredJson
-            setIsearchInpIsempty(false)
-        }
+        let dataForRender = getRenderArray();
+        console.log('dataForRender')
+        console.log(dataForRender)
         return (
             <SafeAreaView
                 style={{
