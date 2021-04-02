@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image, TextInput} from 'react-native';
 import data from './data';
 import { Transition, Transitioning } from 'react-native-reanimated';
 import { Container, Header, Content, Accordion } from "native-base";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const transition = (
     <Transition.Together>
@@ -15,105 +16,67 @@ const transition = (
 
 export default function App() {
     const [currentIndex, setCurrentIndex] = React.useState(null);
+    const [isLoading, setLoading] = useState(true);
     const ref = React.useRef();
+    const [accessToken, setAccessToken] = useState('');
+    const [continueToken, setContinueToken] = useState('');
+    const [userId, setUserId] = useState('');
+    const [personName, setPersonName] = useState('');
+    const [companyName, setCompanyName] = useState('');
+    const [username, setUsername] = useState('');
     const dataArray = [
-        { title: "Контакты", content: <TextInput style={{height: 40, borderColor: 'white'}} placeholder='Поиск'/> },
-        { title: "Настройки", content: "Lorem ipsum dolor sit amet" },
-        { title: "Уведомления", content: "Lorem ipsum dolor sit amet" }
+        { title: "Контакты", content: username },
+        { title: "Настройки", content: "Нет доступных настроек" },
+        { title: "Уведомления", content: "Нет уведомлений" }
     ];
 
+    if(isLoading == true) {
+        console.log('profile');
+        fetchMyAPI2();
+        async function fetchMyAPI2() {
+            await AsyncStorage.getItem('accessToken').then(req => JSON.parse(req))
+                // .then(json => console.log(json[0].accessToken))
+                .then(json => {
+                    setAccessToken(json[0].accessToken);
+                    setUserId(json[1].userId);
+                })
+                .then(json2 => console.log('json2'))
+                .catch(error => console.log('error!'));
+            let data = {
+                method: 'GET',
+                credentials: 'same-origin',
+                mode: 'same-origin',
+                headers: {
+                    'Accept':       'application/json',
+                    'Content-Type': 'application/json',
+                    'x-api-key': accessToken,
+                }
+            }
+            return fetch('http://api.smart24.kz/portal/v1/user/'+userId, data)
+                .then(response => response.json())
+                .then(json => {
+                        console.log(json);
+                        setPersonName(json.personName);
+                        setCompanyName(json.companyName);
+                        setUsername(json.username);
+                    }
+                )
+            console.log('finish');
+        }
+    }
     return (
         <Container>
             <View style={{flex: 0, flexDirection: 'column', alignItems: 'center', marginTop: 50}}>
                 <Image style={styles.message_img} source={require('../assets/images/Done.jpg')}></Image>
                 <View style={{flex: 0, flexDirection: 'column', alignItems: 'center'}}>
-                    <Text style={{fontSize: 22, color: '#898989',}}>Ахметов Ильяс</Text>
-                    <Text style={{fontSize: 14, color: '#898989',}}>Разработчик</Text>
+                    <Text style={{fontSize: 22, color: '#898989',}}>{personName}</Text>
+                    <Text style={{fontSize: 14, color: '#898989',}}>{companyName}</Text>
                 </View>
             </View>
             <Content padder>
                 <Accordion dataArray={dataArray} expanded={0}/>
             </Content>
         </Container>
-        // <Transitioning.View
-        //     ref={ref}
-        //     transition={transition}
-        //     style={styles.container}
-        // >
-        //   <View style={{height: 200, flex: 0, flexDirection: 'column', alignItems: 'center'}}>
-        //     <Image style={styles.message_img} source={require('../assets/images/Done.jpg')}></Image>
-        //     <View style={{flex: 0, flexDirection: 'column', alignItems: 'center'}}>
-        //       <Text style={{fontSize: 22, color: '#898989',}}>Ахметов Ильяс</Text>
-        //       <Text style={{fontSize: 14, color: '#898989',}}>Разработчик</Text>
-        //     </View>
-        //   </View>
-        //   <View style={{flex: 0, paddingRight: 10, paddingLeft: 10}}>
-        //   <StatusBar hidden />
-        //         <TouchableOpacity
-        //             key={1}
-        //             onPress={() => {
-        //               ref.current.animateNextTransition();
-        //               setCurrentIndex(1 === currentIndex ? null : 1);
-        //             }}
-        //             style={styles.cardContainer}
-        //             activeOpacity={0.9}
-        //         >
-        //           <View style={[styles.card]}>
-        //             <Text style={styles.heading}>Контакты</Text>
-        //             {1 === currentIndex && (
-        //                 <View style={styles.subCategoriesList}>
-        //                   <Text>Email</Text>
-        //                     <TextInput
-        //                         style={{height: 40, borderColor: 'gray', borderWidth: 1, width: 300}}
-        //                         placeholder="Поиск"
-        //                     />
-        //                     <Text>Номер телефон</Text>
-        //                     <TextInput
-        //                         style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-        //                         placeholder="Поиск"
-        //                     />
-        //                 </View>
-        //             )}
-        //           </View>
-        //         </TouchableOpacity>
-        //       <TouchableOpacity
-        //           key={2}
-        //           onPress={() => {
-        //             ref.current.animateNextTransition();
-        //             setCurrentIndex(2 === currentIndex ? null : 2);
-        //           }}
-        //           style={styles.cardContainer}
-        //           activeOpacity={0.9}
-        //       >
-        //         <View style={[styles.card]}>
-        //           <Text style={styles.heading}>Настройки</Text>
-        //           {2 === currentIndex && (
-        //               <View style={styles.subCategoriesList}>
-        //                 <Text>Test</Text>
-        //               </View>
-        //           )}
-        //         </View>
-        //       </TouchableOpacity>
-        //       <TouchableOpacity
-        //           key={3}
-        //           onPress={() => {
-        //             ref.current.animateNextTransition();
-        //             setCurrentIndex(3 === currentIndex ? null : 3);
-        //           }}
-        //           style={styles.cardContainer}
-        //           activeOpacity={0.9}
-        //       >
-        //         <View style={[styles.card]}>
-        //           <Text style={styles.heading}>Уведомления</Text>
-        //           {3 === currentIndex && (
-        //               <View style={styles.subCategoriesList}>
-        //                 <Text>Test</Text>
-        //               </View>
-        //           )}
-        //         </View>
-        //       </TouchableOpacity>
-        //   </View>
-        // </Transitioning.View>
     );
 }
 
